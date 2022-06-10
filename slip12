@@ -1,0 +1,120 @@
+#include <stdio.h>
+int main()
+{
+ int a,b,*p,*q,t;
+ printf("Enter two numbers::\n");
+ scanf("%d%d",&a,&b);
+ printf("Numbers before swapping are\na=%d\nb=%d\n",a,b);
+ p=&a;
+ q=&b;
+ t=*p;
+ *p=*q;
+ *q=t;
+ printf("\n\nThe numbers afer swapping are\na=%d\nb=%d\n",a,b);
+}
+
+yash@lenovo:~/slip12$ ./a.out
+Enter two numbers::
+5
+3
+Numbers before swapping are
+a=5
+b=3
+The numbers afer swapping are
+a=3
+b=5
+
+
+#include <stdio.h>
+int main()
+{
+ int c,c1,i;
+ char s[]={"yashchavhan"};
+ printf("The string is '%s'\n",s);
+ for(i=0;s[i]!='\0';i++)
+ {
+ if(s[i]=='a'||s[i]=='A'||s[i]=='e'||s[i]=='E'||s[i]=='i'||s[i]=='I'||s[i]=='o'||s[i]=='O'||s[i]=='u'||s[i]=='U')
+ c++;
+ else
+ c1++;
+ }
+printf("Vowels count=%d\nConsonant count=%d\n",c,c1);
+}
+yash@lenovo:~/slip12$ ./a.out
+The string is 'yashchavhan'
+Vowels count=3
+Consonant count=8
+
+
+
+RDBMS
+slip12=# create table department(dno int primary key,dname varchar(30),city varchar(20));
+CREATE TABLE
+slip12=# INSERT INTO department VALUES(102,'computer','pune');
+INSERT 0 1
+slip12=# insert into department values(101,'science','pune');
+INSERT 0 1slip12=# select * from department;
+ dno | dname | city 
+-----+----------+------
+ 102 | computer | pune
+ 101 | science | pune
+
+
+slip12=# create table employee(eno int primary key,ename varchar(30),salary money);
+CREATE TABLE
+slip12=# INSERT INTO employee VALUES(1,'om',12000,101);
+INSERT 0 1
+slip12=# INSERT INTO employee VALUES(2,'sai',13000,102);
+INSERT 0 1
+slip12=# insert into employee values(3,'sham','30000',101);
+INSERT 0 1
+slip12=# insert into employee values(4,'ram','50000',102);
+INSERT 0 1
+slip12=# insert into employee values(5,'darshan','60000',101);
+INSERT 0 1
+slip12=# select * from employee;
+ eno | ename | salary | d_no 
+-----+---------+------------+------
+ 1 | om | 12,000.00 | 101 ₹
+ 2 | sai | 13,000.00 | 102 ₹
+ 3 | sham | 30,000.00 | 101 ₹
+ 4 | ram | 50,000.00 | 102 ₹
+ 5 | darshan | 60,000.00 | 101 ₹
+(5 rows)
+
+slip12=# create or replace function fun(dept_city varchar(30)) returns int
+slip12-# as
+slip12-# $$
+slip12$# declare
+slip12$# ans int;
+slip12$# begin
+slip12$# select count(*) into ans from department where city=dept_city;
+slip12$# return ans;
+slip12$# end;
+slip12$# $$
+slip12-# language plpgsql;
+CREATE FUNCTION
+slip12=# select fun('pune');
+ fun 
+-----
+ 2
+(1 row)
+
+
+slip12=# create or replace function f1() returns trigger
+slip12-# as
+slip12-# $$
+slip12$# begin
+slip12$# if(new.salary<0)then
+slip12$# raise exception'salary less than 0 not allowed';
+slip12$# end if;
+slip12$# return new;
+slip12$# end;
+slip12$# $$
+slip12-# language plpgsql;
+CREATE FUNCTION
+slip12=# create trigger t1
+slip12-# before insert on employee
+slip12-# for each row 
+slip12-# execute procedure f1();
+CREATE TRIGGER
